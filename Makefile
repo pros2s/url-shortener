@@ -6,6 +6,10 @@ runPath ?= main.go
 run:
 	go run $(runPath)
 
+## run-cmd: Run go app from "./cmd/url-shortener"
+run-cmd:
+	go run ./cmd/url-shortener
+
 ## help: help command
 help: Makefile
 	@echo " Choose a command run in "$(PROJECT_NAME)":"
