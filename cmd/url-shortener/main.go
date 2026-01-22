@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"url-shortener/internal"
+	"url-shortener/internal/lib/sl"
 )
 
 const (
@@ -18,6 +19,14 @@ func main() {
 
 	log := setupLogger(cfg.Env)
 	log.Info("Log info", slog.String("env", cfg.Env))
+
+	storage, err := internal.SqliteNew(cfg.StoragePath)
+	if err != nil {
+		log.Error("Failed to init storage", sl.AttrByErr(err))
+		os.Exit(1)
+	}
+
+	_ = storage
 }
 
 func setupLogger(env string) *slog.Logger {
