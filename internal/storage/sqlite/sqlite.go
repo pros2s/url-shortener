@@ -2,6 +2,7 @@ package sqlite
 
 import (
 	"database/sql"
+	"errors"
 	"fmt"
 
 	"url-shortener/internal/storage"
@@ -51,7 +52,9 @@ func (s *SqliteStorage) SaveToUrl(url string, alias string) (int64, error) {
 
 	res, err := stmt.Exec(url, alias)
 	if err != nil {
-		if sqliteErr, ok := err.(*sqlite.Error); ok && sqliteErr.Code() == sqlite3.SQLITE_CONSTRAINT_UNIQUE {
+		var sqliteErr *sqlite.Error
+
+		if errors.As(err, &sqliteErr); sqliteErr.Code() == sqlite3.SQLITE_CONSTRAINT_UNIQUE {
 			return 0, fmt.Errorf("%s, %w", fn, storage.ErrUrlExists)
 		}
 
@@ -64,4 +67,30 @@ func (s *SqliteStorage) SaveToUrl(url string, alias string) (int64, error) {
 	}
 
 	return id, nil
+}
+
+func (s *SqliteStorage) RemoveUrl(id int64) error {
+	fn := "internal.sqlite.RemoveUrl"
+
+	stmt, err := s.db.Prepare("DELETE FROM url WHERE id = ?")
+	if err != nil {
+		return fmt.Errorf("%s, %w", fn, err)
+	}
+
+	res, err := stmt.Exec(id)
+	if err != nil {
+		return fmt.Errorf("%s, %w", fn, err)
+	}
+
+	rowsCount, err := res.RowsAffected()
+	fmt.Println(rowsCount)
+	if err != nil {
+		return fmt.Errorf("%s: get rows affected: %w", fn, err)
+	}
+
+	if rowsCount == 0 {
+		return storage.ErrUrlNotFound
+	}
+
+	return nil
 }
