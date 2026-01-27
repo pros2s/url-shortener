@@ -28,22 +28,14 @@ func main() {
 		os.Exit(1)
 	}
 
-	// save
-	id, err := storage.SaveToUrl("https://google.com", "google")
+	// get url
+	resUrl, err := storage.GetUrl("google")
 	if err != nil {
-		log.Error("Failed to save url", sl.AttrByErr(err))
+		log.Error("Failed to get url", sl.AttrByErr(err))
 		os.Exit(1)
 	}
 
-	log.Info("Save url with id: ", slog.Attr{Key: "id", Value: slog.Int64Value(id)})
-
-	// remove
-	if err := storage.RemoveUrl(id); err != nil {
-		log.Error("Failed to delete url", sl.AttrByErr(err))
-		os.Exit(1)
-	}
-
-	log.Info("Delete url with id: ", slog.Attr{Key: "id", Value: slog.Int64Value(id)})
+	log.Info("Url by alias: google", slog.Attr{Key: "url", Value: slog.StringValue(resUrl)})
 }
 
 func setupLogger(env string) *slog.Logger {
