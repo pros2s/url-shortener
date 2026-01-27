@@ -5,6 +5,7 @@ go 1.25.5
 require (
 	github.com/glebarez/go-sqlite v1.22.0
 	github.com/ilyakaznacheev/cleanenv v1.5.0
+	modernc.org/sqlite v1.28.0
 )
 
 require (
@@ -19,6 +20,5 @@ require (
 	modernc.org/libc v1.37.6 // indirect
 	modernc.org/mathutil v1.6.0 // indirect
 	modernc.org/memory v1.7.2 // indirect
-	modernc.org/sqlite v1.28.0 // indirect
 	olympos.io/encoding/edn v0.0.0-20201019073823-d3554ca0b0a3 // indirect
 )
