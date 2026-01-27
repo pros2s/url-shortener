@@ -71,16 +71,16 @@ func (s *SqliteStorage) SaveToUrl(url string, alias string) (int64, error) {
 	return id, nil
 }
 
-func (s *SqliteStorage) RemoveUrl(id int64) error {
-	fn := "internal.sqlite.RemoveUrl"
+func (s *SqliteStorage) DeleteUrl(alias string) error {
+	fn := "internal.sqlite.DeleteUrl"
 
-	stmt, err := s.db.Prepare("DELETE FROM url WHERE id = ?")
+	stmt, err := s.db.Prepare("DELETE FROM url WHERE alias = ?")
 	if err != nil {
 		return fmt.Errorf("%s, %w", fn, err)
 	}
 	defer stmt.Close()
 
-	res, err := stmt.Exec(id)
+	res, err := stmt.Exec(alias)
 	if err != nil {
 		return fmt.Errorf("%s, %w", fn, err)
 	}

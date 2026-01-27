@@ -28,14 +28,10 @@ func main() {
 		os.Exit(1)
 	}
 
-	// get url
-	resUrl, err := storage.GetUrl("google")
-	if err != nil {
-		log.Error("Failed to get url", sl.AttrByErr(err))
+	if err := storage.DeleteUrl("google"); err != nil {
+		log.Error("Failed to Delete url", sl.AttrByErr(err))
 		os.Exit(1)
 	}
-
-	log.Info("Url by alias: google", slog.Attr{Key: "url", Value: slog.StringValue(resUrl)})
 }
 
 func setupLogger(env string) *slog.Logger {
