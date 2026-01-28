@@ -4,6 +4,7 @@ go 1.25.5
 
 require (
 	github.com/glebarez/go-sqlite v1.22.0
+	github.com/go-chi/chi/v5 v5.2.4
 	github.com/ilyakaznacheev/cleanenv v1.5.0
 	modernc.org/sqlite v1.28.0
 )

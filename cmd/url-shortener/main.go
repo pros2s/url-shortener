@@ -7,6 +7,9 @@ import (
 	"url-shortener/internal/config"
 	"url-shortener/internal/lib/sl"
 	"url-shortener/internal/storage/sqlite"
+
+	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/chi/v5/middleware"
 )
 
 const (
@@ -27,11 +30,13 @@ func main() {
 		log.Error("Failed to init storage", sl.AttrByErr(err))
 		os.Exit(1)
 	}
+	_ = storage
 
-	if err := storage.DeleteUrl("google"); err != nil {
-		log.Error("Failed to Delete url", sl.AttrByErr(err))
-		os.Exit(1)
-	}
+	router := chi.NewRouter()
+	router.Use(middleware.RequestID)
+	router.Use(middleware.Logger)
+	router.Use(middleware.Recoverer)
+	router.Use(middleware.URLFormat)
 }
 
 func setupLogger(env string) *slog.Logger {
